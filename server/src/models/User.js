@@ -29,6 +29,7 @@ userSchema.methods.comparePassword = function (plain) {
   return bcrypt.compare(plain, this.password);
 };
 
+
 userSchema.methods.toSafeJSON = function () {
   return {
     id: this._id,

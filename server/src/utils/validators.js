@@ -38,6 +38,7 @@ function commentError(c) {
   return null;
 }
 
+
 function validateUser(body, { requirePassword = true, partial = false } = {}) {
   const errors = {};
   const data = {};

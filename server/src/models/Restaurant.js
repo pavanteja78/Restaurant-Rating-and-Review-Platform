@@ -11,6 +11,7 @@ const restaurantSchema = new mongoose.Schema(
     openingHours: { type: String, trim: true, maxlength: 200, default: '' },
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   },
+  
   { timestamps: true }
 );
 
