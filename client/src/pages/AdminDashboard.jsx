@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const total = stats.distribution.reduce((s, d) => s + d.count, 0);
   return (
     <>
+      <p className="kicker" style={{ color: '#b8901a' }}>Operations</p>
       <h1>Dashboard</h1>
       <div className="stat-strip">
         <div><strong>{stats.totalUsers}</strong><span>Total users</span></div>
@@ -28,9 +29,9 @@ export default function AdminDashboard() {
         <section>
           <h2>Users by role</h2>
           <ul className="plain">
-            <li>Customers: {stats.usersByRole.customer || 0}</li>
-            <li>Restaurant owners: {stats.usersByRole.owner || 0}</li>
-            <li>Administrators: {stats.usersByRole.admin || 0}</li>
+            <li><span>Customers</span><strong>{stats.usersByRole.customer || 0}</strong></li>
+            <li><span>Restaurant owners</span><strong>{stats.usersByRole.owner || 0}</strong></li>
+            <li><span>Administrators</span><strong>{stats.usersByRole.admin || 0}</strong></li>
           </ul>
         </section>
       </div>

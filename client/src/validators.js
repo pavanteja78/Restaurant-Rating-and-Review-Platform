@@ -1,5 +1,4 @@
-// Client-side validation mirrors the server rules for quick feedback.
-// The server re-validates everything; these checks are only a convenience.
+
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export function passwordError(pw) {

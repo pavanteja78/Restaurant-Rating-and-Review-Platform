@@ -50,6 +50,7 @@ export default function OwnerDashboard() {
 
   return (
     <>
+      <p className="kicker" style={{ color: '#b8901a' }}>Owner studio</p>
       <h1>{r.name}</h1>
       <div className="stat-strip">
         <div><strong>{r.averageRating === null ? 'No ratings yet' : ratingText(r.averageRating)}</strong><span>Average rating</span></div>
@@ -75,7 +76,7 @@ export default function OwnerDashboard() {
         </section>
       </div>
 
-      <section>
+      <section className="card-block">
         <h2>Customer reviews</h2>
         {reviews.length === 0 ? <p className="page-note">No customer has reviewed your restaurant yet.</p> : (
           <div className="table-wrap">

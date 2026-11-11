@@ -12,14 +12,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, 'Enter a valid email address'],
     },
-    password: { type: String, required: true, select: false }, // always a bcrypt hash
+    password: { type: String, required: true, select: false }, 
     role: { type: String, enum: ['admin', 'customer', 'owner'], default: 'customer', index: true },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
 
-// Hash only when the password field was set/changed. Plain text is never persisted.
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   const rounds = parseInt(process.env.BCRYPT_ROUNDS, 10) || 10;

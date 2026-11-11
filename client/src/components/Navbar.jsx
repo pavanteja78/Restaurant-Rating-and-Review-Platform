@@ -6,7 +6,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   return (
     <header className="topbar">
-      <Link to="/" className="brand">Tablemark</Link>
+      <Link to="/" className="brand"><span className="brand-mark" aria-hidden="true">T</span>Tablemark</Link>
       <nav className="nav">
         <NavLink to="/" end>Restaurants</NavLink>
         {user?.role === 'owner' && <NavLink to="/owner">My restaurant</NavLink>}

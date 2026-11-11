@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth.jsx';
 import { Alert, Field } from '../components/Common.jsx';
 import { userErrors } from '../validators.js';
+import { AUTH_IMAGE } from '../cover.js';
 
 export default function Register() {
   const { register } = useAuth();
@@ -32,19 +33,32 @@ export default function Register() {
   };
 
   return (
-    <section className="auth">
-      <h1>Create your account</h1>
-      <form onSubmit={submit} noValidate>
-        <Alert error={error} />
-        <Field label="Name" error={errors.name}><input value={form.name} onChange={set('name')} autoComplete="name" /></Field>
-        <Field label="Email" error={errors.email}><input type="email" value={form.email} onChange={set('email')} autoComplete="email" /></Field>
-        <Field label="Password" error={errors.password}>
-          <input type="password" value={form.password} onChange={set('password')} autoComplete="new-password" />
-        </Field>
-        <p className="hint">8 to 16 characters with an uppercase letter, a lowercase letter, a number and a special character.</p>
-        <button className="btn" disabled={busy}>{busy ? 'Creating account...' : 'Sign up'}</button>
-      </form>
-      <p className="aside">Already registered? <Link to="/login">Log in</Link></p>
+    <section className="auth-split">
+      <div className="auth-visual" style={{ backgroundImage: `url(${AUTH_IMAGE})` }}>
+        <div>
+          <p className="kicker">Join the guide</p>
+          <h2>Write the review someone will trust next week.</h2>
+          <p>Customer accounts can rate, revise, and keep a personal map of favourite tables.</p>
+        </div>
+      </div>
+      <div className="auth-panel">
+        <div className="auth-card">
+          <p className="kicker" style={{ color: '#b8901a' }}>New guest</p>
+          <h1>Create your account</h1>
+          <p className="lead">Join as a customer to discover restaurants and share reviews.</p>
+          <form onSubmit={submit} noValidate>
+            <Alert error={error} />
+            <Field label="Name" error={errors.name}><input value={form.name} onChange={set('name')} autoComplete="name" /></Field>
+            <Field label="Email" error={errors.email}><input type="email" value={form.email} onChange={set('email')} autoComplete="email" /></Field>
+            <Field label="Password" error={errors.password}>
+              <input type="password" value={form.password} onChange={set('password')} autoComplete="new-password" />
+            </Field>
+            <p className="hint">8 to 16 characters with an uppercase letter, a lowercase letter, a number and a special character.</p>
+            <button className="btn btn-gold" disabled={busy}>{busy ? 'Creating account...' : 'Take a seat'}</button>
+          </form>
+          <p className="aside">Already registered? <Link to="/login">Log in</Link></p>
+        </div>
+      </div>
     </section>
   );
 }

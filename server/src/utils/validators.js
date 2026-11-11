@@ -11,7 +11,7 @@ const escapeRegex = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const exactCI = (s) => new RegExp(`^${escapeRegex(s.trim())}$`, 'i');
 const str = (v) => (typeof v === 'string' ? v.trim() : '');
 
-// 8-16 chars, upper, lower, digit, special
+
 function passwordError(pw) {
   if (typeof pw !== 'string' || !pw) return 'Password is required.';
   if (pw.length < 8 || pw.length > 16) return 'Password must be 8 to 16 characters long.';
@@ -22,7 +22,6 @@ function passwordError(pw) {
   return null;
 }
 
-// Rating must be a real JSON number, an integer, 1..5. Rejects 0, 6, -1, 3.5, "", "abc", null.
 function ratingError(r) {
   if (r === undefined || r === null || r === '') return 'Rating is required.';
   if (typeof r !== 'number' || Number.isNaN(r)) return 'Rating must be a number.';
@@ -39,7 +38,6 @@ function commentError(c) {
   return null;
 }
 
-// Validates user input. requirePassword=false lets updates omit the password.
 function validateUser(body, { requirePassword = true, partial = false } = {}) {
   const errors = {};
   const data = {};

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useAuth } from './auth.jsx';
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -14,24 +14,38 @@ import AdminReviews from './pages/AdminReviews.jsx';
 
 export default function App() {
   const { loading } = useAuth();
-  if (loading) return <p className="page-note">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="boot">
+        <div className="spinner" aria-hidden="true" />
+        <p>Setting the table…</p>
+      </div>
+    );
+  }
   return (
-    <>
+    <div className="app">
       <Navbar />
-      <main className="page">
+      <main className="stage">
         <Routes>
           <Route path="/" element={<Restaurants />} />
           <Route path="/restaurants/:id" element={<RestaurantDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/owner" element={<ProtectedRoute roles={['owner']}><OwnerDashboard /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/users" element={<ProtectedRoute roles={['admin']}><AdminUsers /></ProtectedRoute>} />
-          <Route path="/admin/restaurants" element={<ProtectedRoute roles={['admin']}><AdminRestaurants /></ProtectedRoute>} />
-          <Route path="/admin/reviews" element={<ProtectedRoute roles={['admin']}><AdminReviews /></ProtectedRoute>} />
-          <Route path="*" element={<p className="page-note">Page not found. <a href="/">Back to restaurants</a></p>} />
+          <Route path="/owner" element={<ProtectedRoute roles={['owner']}><div className="page"><OwnerDashboard /></div></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute roles={['admin']}><div className="page"><AdminDashboard /></div></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute roles={['admin']}><div className="page"><AdminUsers /></div></ProtectedRoute>} />
+          <Route path="/admin/restaurants" element={<ProtectedRoute roles={['admin']}><div className="page"><AdminRestaurants /></div></ProtectedRoute>} />
+          <Route path="/admin/reviews" element={<ProtectedRoute roles={['admin']}><div className="page"><AdminReviews /></div></ProtectedRoute>} />
+          <Route path="*" element={
+            <section className="lost">
+              <p className="kicker">404</p>
+              <h1>This table is empty.</h1>
+              <p className="page-note">The page you wanted isn’t on the menu. <a href="/">Return to restaurants</a></p>
+            </section>
+          } />
         </Routes>
       </main>
-    </>
+      <footer className="site-footer">Tablemark · find a table · leave an honest mark</footer>
+    </div>
   );
 }

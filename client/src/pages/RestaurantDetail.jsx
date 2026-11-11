@@ -3,9 +3,11 @@ import { Link, useParams } from 'react-router-dom';
 import { api } from '../api.js';
 import { useAuth } from '../auth.jsx';
 import { Alert, Notice, Pager, fmtDate } from '../components/Common.jsx';
-import { Stars, StarInput, ratingText } from '../components/Stars.jsx';
+import { Stars, StarInput } from '../components/Stars.jsx';
 import RatingDistribution from '../components/RatingDistribution.jsx';
+import ScoreRing from '../components/ScoreRing.jsx';
 import { reviewErrors } from '../validators.js';
+import { restaurantCover } from '../cover.js';
 
 function ReviewForm({ restaurantId, existing, onSaved }) {
   const [rating, setRating] = useState(existing?.rating || 0);
@@ -31,7 +33,7 @@ function ReviewForm({ restaurantId, existing, onSaved }) {
       onSaved();
     } catch (err) {
       setError(err); setErrors(err.errors || {});
-      if (err.status === 409) onSaved(); // already reviewed: reload so the edit form shows
+      if (err.status === 409) onSaved();
     } finally { setBusy(false); }
   };
 
@@ -47,6 +49,7 @@ function ReviewForm({ restaurantId, existing, onSaved }) {
 
   return (
     <form className="review-form" onSubmit={save} noValidate>
+      <p className="kicker" style={{ color: '#b8901a' }}>{existing ? 'Your mark' : 'Leave a mark'}</p>
       <h2>{existing ? 'Your review' : 'Rate this restaurant'}</h2>
       <Alert error={error} />
       <Notice>{notice}</Notice>
@@ -87,62 +90,73 @@ export default function RestaurantDetail() {
     try { await api(`/reviews/${rid}`, { method: 'DELETE' }); loadAll(); } catch (e) { setError(e); }
   };
 
-  if (error && !data) return <><Alert error={error} /><Link to="/">Back to restaurants</Link></>;
-  if (!data) return <p className="page-note">Loading...</p>;
+  if (error && !data) return <div className="page"><Alert error={error} /><Link to="/" className="back">All restaurants</Link></div>;
+  if (!data) return <div className="page"><p className="page-note">Loading the table…</p></div>;
   const { restaurant: r, distribution, totalRatings, myReview } = data;
+  const cover = restaurantCover(r.name, r.cuisine);
 
   return (
     <>
-      <Link to="/" className="back">All restaurants</Link>
-      <header className="detail-head">
-        <div>
-          <h1>{r.name}</h1>
-          <p className="meta"><span>{r.cuisine}</span><span>{r.location}</span></p>
-          {r.address && <p>{r.address}</p>}
-          {r.openingHours && <p>Open: {r.openingHours}</p>}
-          {r.phone && <p>Phone: {r.phone}</p>}
-          {r.description && <p className="desc">{r.description}</p>}
+      <section className="detail-hero">
+        <div className="hero-media" style={{ backgroundImage: `url(${cover})` }} />
+        <div className="detail-hero-copy">
+          <div>
+            <Link to="/" className="back" style={{ color: '#d8cfc3' }}>All restaurants</Link>
+            <p className="kicker">{r.cuisine} · {r.location}</p>
+            <h1>{r.name}</h1>
+            <div className="detail-facts">
+              {r.address && <p>{r.address}</p>}
+              {r.openingHours && <p>Open {r.openingHours}</p>}
+              {r.phone && <p>{r.phone}</p>}
+            </div>
+            {r.description && <p className="desc">{r.description}</p>}
+          </div>
+          <div>
+            <ScoreRing value={r.averageRating} size={110} />
+            <p className="place-meta" style={{ marginTop: '.7rem', color: '#d8cfc3' }}>
+              {r.averageRating !== null && <Stars value={r.averageRating} />}
+              <span>{r.reviewCount} {r.reviewCount === 1 ? 'review' : 'reviews'}</span>
+            </p>
+            {r.myRating && <small className="mine">Your rating: {r.myRating} of 5</small>}
+          </div>
         </div>
-        <div className="big-score">
-          {r.averageRating === null ? <span className="none">No ratings yet</span> : <strong>{ratingText(r.averageRating)}</strong>}
-          {r.averageRating !== null && <Stars value={r.averageRating} />}
-          <small>{r.reviewCount} {r.reviewCount === 1 ? 'review' : 'reviews'}</small>
-          {r.myRating && <small className="mine">Your rating: {r.myRating} of 5</small>}
+      </section>
+
+      <div className="detail-grid">
+        <Alert error={error} />
+        <div className="two-col">
+          <section>
+            <p className="kicker" style={{ color: '#b8901a' }}>The room’s verdict</p>
+            <h2>Rating breakdown</h2>
+            {totalRatings === 0 ? <p className="page-note">No ratings yet. Be the first to rate it.</p> : <RatingDistribution distribution={distribution} />}
+          </section>
+          <section>
+            {user?.role === 'customer' && <ReviewForm restaurantId={id} existing={myReview} onSaved={loadAll} />}
+            {!user && <p className="page-note"><Link to="/login" state={{ from: `/restaurants/${id}` }}>Log in</Link> as a customer to rate and review this restaurant.</p>}
+            {user && user.role !== 'customer' && <p className="page-note">Only customer accounts can post reviews.</p>}
+          </section>
         </div>
-      </header>
 
-      <Alert error={error} />
-
-      <div className="two-col">
-        <section>
-          <h2>Rating breakdown</h2>
-          {totalRatings === 0 ? <p className="page-note">No ratings yet. Be the first to rate it.</p> : <RatingDistribution distribution={distribution} />}
-        </section>
-        <section>
-          {user?.role === 'customer' && <ReviewForm restaurantId={id} existing={myReview} onSaved={loadAll} />}
-          {!user && <p className="page-note"><Link to="/login" state={{ from: `/restaurants/${id}` }}>Log in</Link> as a customer to rate and review this restaurant.</p>}
-          {user && user.role !== 'customer' && <p className="page-note">Only customer accounts can post reviews.</p>}
+        <section className="card-block">
+          <p className="kicker" style={{ color: '#b8901a' }}>Guest book</p>
+          <h2>Reviews</h2>
+          {reviews?.reviews.length === 0 && <p className="page-note">No written reviews yet.</p>}
+          <ul className="reviews">
+            {reviews?.reviews.map((rv) => (
+              <li key={rv._id}>
+                <div className="review-top">
+                  <strong>{rv.customer?.name || 'Former user'}</strong>
+                  <Stars value={rv.rating} />
+                  <time>{fmtDate(rv.updatedAt)}</time>
+                </div>
+                <p>{rv.comment}</p>
+                {user?.role === 'admin' && <button className="btn btn-danger btn-small" onClick={() => adminDelete(rv._id)}>Remove review</button>}
+              </li>
+            ))}
+          </ul>
+          {reviews && <Pager page={reviews.page} pages={reviews.pages} onPage={setPage} />}
         </section>
       </div>
-
-      <section>
-        <h2>Reviews</h2>
-        {reviews?.reviews.length === 0 && <p className="page-note">No written reviews yet.</p>}
-        <ul className="reviews">
-          {reviews?.reviews.map((rv) => (
-            <li key={rv._id}>
-              <div className="review-top">
-                <strong>{rv.customer?.name || 'Former user'}</strong>
-                <Stars value={rv.rating} />
-                <time>{fmtDate(rv.updatedAt)}</time>
-              </div>
-              <p>{rv.comment}</p>
-              {user?.role === 'admin' && <button className="btn btn-danger btn-small" onClick={() => adminDelete(rv._id)}>Remove review</button>}
-            </li>
-          ))}
-        </ul>
-        {reviews && <Pager page={reviews.page} pages={reviews.pages} onPage={setPage} />}
-      </section>
     </>
   );
 }

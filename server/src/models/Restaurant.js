@@ -9,7 +9,6 @@ const restaurantSchema = new mongoose.Schema(
     description: { type: String, trim: true, maxlength: 1000, default: '' },
     phone: { type: String, trim: true, maxlength: 30, default: '' },
     openingHours: { type: String, trim: true, maxlength: 200, default: '' },
-    // One restaurant per owner. The partial index ignores null, so many unowned restaurants are fine.
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   },
   { timestamps: true }

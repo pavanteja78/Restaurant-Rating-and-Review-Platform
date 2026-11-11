@@ -22,7 +22,6 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Business rule enforced by the database: one review per customer per restaurant.
 reviewSchema.index({ customer: 1, restaurant: 1 }, { unique: true });
 
 module.exports = mongoose.model('Review', reviewSchema);

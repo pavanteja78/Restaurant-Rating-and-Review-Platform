@@ -103,7 +103,7 @@ export default function AdminUsers() {
                         <option value="admin">Administrator</option>
                       </select>
                     </td>
-                    <td>{u.isActive ? 'Active' : 'Deactivated'}</td>
+                    <td><span className={`badge ${u.isActive ? 'badge-on' : 'badge-off'}`}>{u.isActive ? 'Active' : 'Deactivated'}</span></td>
                     <td>{fmtDate(u.createdAt)}</td>
                     <td className="row-actions">
                       <button className="btn btn-quiet btn-small" disabled={self}
