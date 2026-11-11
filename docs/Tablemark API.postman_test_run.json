@@ -1,0 +1,1906 @@
+{
+	"id": "85f7b2d4-7728-494c-8d1f-2ceb92dda5b0",
+	"name": "Tablemark API",
+	"timestamp": "2026-11-11T06:28:38.330Z",
+	"collection_id": "34639983-c02f6882-25c7-4bd9-a4c0-a904b849c570",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 64,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-11-11T06:28:29.042Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "6f6594b0-b382-441b-a41a-3a0aa356e6a8",
+			"name": "Login as Admin",
+			"url": "http://localhost:5000/api/auth/login",
+			"time": 894,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				894
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "e7a9ad01-e43a-4009-b988-daf16f0c0f69",
+			"name": "Login as Owner",
+			"url": "http://localhost:5000/api/auth/login",
+			"time": 196,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				196
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "b49be1e0-3424-4e03-927c-72248d71dc6e",
+			"name": "Login as Customer",
+			"url": "http://localhost:5000/api/auth/login",
+			"time": 259,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				259
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "9131fc56-edb4-4988-aceb-b4e153e61d62",
+			"name": "Register a second customer (201)",
+			"url": "http://localhost:5000/api/auth/register",
+			"time": 274,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				274
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "843a1c7b-9163-41e1-a9cd-4f99ea8e73f7",
+			"name": "Find seeded owner id",
+			"url": "http://localhost:5000/api/admin/users?role=owner&search=owner@tablemark.com",
+			"time": 51,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				51
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "4514d70b-18c5-4f89-8af2-083a6590b670",
+			"name": "Create restaurant A (no owner)",
+			"url": "http://localhost:5000/api/restaurants",
+			"time": 58,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				58
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "a1df8a23-c110-4c28-96e1-0550eba10964",
+			"name": "Create restaurant B",
+			"url": "http://localhost:5000/api/restaurants",
+			"time": 23,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "86abae63-8ece-44ea-829f-b1914724fbfb",
+			"name": "Assign seeded owner to B (409 if owner already has a restaurant from an earlier run)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b5/owner",
+			"time": 48,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200 or 409": true
+			},
+			"testPassFailCounts": {
+				"Status is 200 or 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				48
+			],
+			"allTests": [
+				{
+					"Status is 200 or 409": true
+				}
+			]
+		},
+		{
+			"id": "c9d514ef-3dbd-42bb-8da9-5ee3409870df",
+			"name": "Weak password (400)",
+			"url": "http://localhost:5000/api/auth/register",
+			"time": 10,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "00e5c790-8596-4b2c-9c89-67f9d17d3080",
+			"name": "Invalid email (400)",
+			"url": "http://localhost:5000/api/auth/register",
+			"time": 9,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "2c1a03e6-874c-4b42-879c-051a65a6e1da",
+			"name": "Duplicate email (409)",
+			"url": "http://localhost:5000/api/auth/register",
+			"time": 10,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status is 409": true
+			},
+			"testPassFailCounts": {
+				"Status is 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 409": true
+				}
+			]
+		},
+		{
+			"id": "7dacdeae-d81a-4db4-9848-c5a3dea08118",
+			"name": "Wrong password (401)",
+			"url": "http://localhost:5000/api/auth/login",
+			"time": 246,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status is 401": true
+			},
+			"testPassFailCounts": {
+				"Status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				246
+			],
+			"allTests": [
+				{
+					"Status is 401": true
+				}
+			]
+		},
+		{
+			"id": "2ba111fc-454f-4c24-8e16-3e730a4c2a51",
+			"name": "Current user",
+			"url": "http://localhost:5000/api/auth/me",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "a24007d7-e453-4a38-b65c-aecb777fb913",
+			"name": "Current user without token (401)",
+			"url": "http://localhost:5000/api/auth/me",
+			"time": 5,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status is 401": true
+			},
+			"testPassFailCounts": {
+				"Status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status is 401": true
+				}
+			]
+		},
+		{
+			"id": "a3ea9be4-cbea-4d56-80f7-f7418669b288",
+			"name": "List restaurants",
+			"url": "http://localhost:5000/api/restaurants",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "4cecdfc3-6f12-4b81-895b-924a8360c0ca",
+			"name": "Search by name",
+			"url": "http://localhost:5000/api/restaurants?search=Collection%20Test%20A",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true,
+				"finds restaurant A": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"finds restaurant A": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 200": true,
+					"finds restaurant A": true
+				}
+			]
+		},
+		{
+			"id": "3b2d9364-6b61-458a-a486-ff8e6cb12119",
+			"name": "Filter by location",
+			"url": "http://localhost:5000/api/restaurants?location=Testville",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "a369ca6b-96ff-4f06-b8ed-4aef5c009884",
+			"name": "Filter by cuisine + sort by rating",
+			"url": "http://localhost:5000/api/restaurants?cuisine=Thai&sort=rating",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "0588e90d-fd37-44ac-962f-784c48d086b9",
+			"name": "Filter options",
+			"url": "http://localhost:5000/api/restaurants/filters",
+			"time": 75,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				75
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "9c434075-3271-4219-9e09-19be7a20044b",
+			"name": "Detail (no ratings yet)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1",
+			"time": 34,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true,
+				"averageRating is null with no reviews": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"averageRating is null with no reviews": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"Status is 200": true,
+					"averageRating is null with no reviews": true
+				}
+			]
+		},
+		{
+			"id": "41161366-812a-4407-a56c-3c87fea99727",
+			"name": "Rating distribution (aggregation)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/distribution",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "a1c0ae81-b71e-4a0b-8bb4-8d2de15e9c5f",
+			"name": "Invalid ObjectId (400)",
+			"url": "http://localhost:5000/api/restaurants/not-an-id",
+			"time": 6,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				6
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "038ff9b2-d462-4358-916a-923f6543dd61",
+			"name": "Unknown restaurant (404)",
+			"url": "http://localhost:5000/api/restaurants/64b7f0c2a1b2c3d4e5f60718",
+			"time": 10,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status is 404": true
+			},
+			"testPassFailCounts": {
+				"Status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 404": true
+				}
+			]
+		},
+		{
+			"id": "c3c86fa3-19e7-4d7a-b87c-5fc810c15b32",
+			"name": "Create review (201)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 22,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				22
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "75fa3bc8-5cbc-4738-b602-7d0bbe4fbccf",
+			"name": "Second review for same restaurant (409)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 16,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status is 409": true
+			},
+			"testPassFailCounts": {
+				"Status is 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status is 409": true
+				}
+			]
+		},
+		{
+			"id": "9f8d165e-3474-49f4-a829-006805047da3",
+			"name": "Rating 6 (400)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 10,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "8dbba134-c9fd-4c6d-8c33-bf194302f4af",
+			"name": "Rating 0 (400)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 11,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "5d8db2f9-297c-4537-bdaf-0b82ba392361",
+			"name": "Rating 3.5 (400)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 44,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				44
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "9393d018-bab7-47e7-8d10-e6979f19ff1a",
+			"name": "Rating \"abc\" (400)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 134,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				134
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "033fffe7-96c0-4325-9224-7a6f0abf56e9",
+			"name": "Missing rating (400)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 11,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "e4a33514-cb02-45db-8044-eee7ef8719e8",
+			"name": "No token (401)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 5,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status is 401": true
+			},
+			"testPassFailCounts": {
+				"Status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status is 401": true
+				}
+			]
+		},
+		{
+			"id": "94a1975b-069c-451f-95e2-8884cecd86d9",
+			"name": "Owner role cannot review (403)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 10,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "9726c14c-fd0c-4cbf-adf1-b43daea43e3c",
+			"name": "Customer 2 edits customer 1's review (403)",
+			"url": "http://localhost:5000/api/reviews/6af40b1299707490c9e908d3",
+			"time": 16,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "afd43ad5-50be-4b20-b1cf-31738d637b5c",
+			"name": "Customer 2 deletes customer 1's review (403)",
+			"url": "http://localhost:5000/api/reviews/6af40b1299707490c9e908d3",
+			"time": 11,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "2a3fb3ce-6a51-44e1-9f3d-49a468e1b3e1",
+			"name": "Update own review",
+			"url": "http://localhost:5000/api/reviews/6af40b1299707490c9e908d3",
+			"time": 24,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "aa8e85fc-b1a5-4d34-89e1-c98e8aab78e4",
+			"name": "Customer 2 posts a review (201)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/reviews",
+			"time": 25,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				25
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "f0312dc7-97d7-47ec-a056-869b15ac3a19",
+			"name": "Average is now 3.5 (4 and 3)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true,
+				"average 3.5, 2 reviews": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"average 3.5, 2 reviews": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status is 200": true,
+					"average 3.5, 2 reviews": true
+				}
+			]
+		},
+		{
+			"id": "cef236ea-b95a-4dfa-be24-8d40ec2f10b2",
+			"name": "Delete own review",
+			"url": "http://localhost:5000/api/reviews/6af40b1299707490c9e908d3",
+			"time": 25,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				25
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "79c74123-dabb-4663-bdd5-94eaac04311a",
+			"name": "Deleted review is gone (404)",
+			"url": "http://localhost:5000/api/reviews/6af40b1299707490c9e908d3",
+			"time": 15,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status is 404": true
+			},
+			"testPassFailCounts": {
+				"Status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status is 404": true
+				}
+			]
+		},
+		{
+			"id": "d4b71d8e-4031-4308-a81d-70f2c89b49a3",
+			"name": "My restaurant (+ distribution)",
+			"url": "http://localhost:5000/api/owner/restaurant",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "835754ce-71a8-4318-ab9f-0f3026a920e5",
+			"name": "Reviews + customers for my restaurant",
+			"url": "http://localhost:5000/api/owner/reviews",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "d3118143-df1d-4bef-9c59-6c2a8af6a6ff",
+			"name": "Update permitted details",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b5",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "295c2dd7-3165-477f-ad1b-5a423b2d3fc7",
+			"name": "Try to rename restaurant (403)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b5",
+			"time": 10,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "fd2f3ffc-ae78-4f1c-b7cc-211a861dd756",
+			"name": "Update another owner's restaurant (403)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1",
+			"time": 14,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "6dd3f013-9140-4324-bc37-e0d527290c72",
+			"name": "Customer cannot use owner routes (403)",
+			"url": "http://localhost:5000/api/owner/restaurant",
+			"time": 11,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "7da1960a-691f-440f-895c-b06c2556f6e9",
+			"name": "Dashboard stats",
+			"url": "http://localhost:5000/api/admin/stats",
+			"time": 35,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true,
+				"has dashboard fields": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"has dashboard fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				35
+			],
+			"allTests": [
+				{
+					"Status is 200": true,
+					"has dashboard fields": true
+				}
+			]
+		},
+		{
+			"id": "3ab7a665-2b3b-4d02-b14e-ade7d8daa318",
+			"name": "Search/filter users",
+			"url": "http://localhost:5000/api/admin/users?role=customer&search=a",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "a3609caf-5823-423a-b38e-97845e91c48e",
+			"name": "Create restaurant owner (201)",
+			"url": "http://localhost:5000/api/admin/users",
+			"time": 217,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status is 201": true
+			},
+			"testPassFailCounts": {
+				"Status is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				217
+			],
+			"allTests": [
+				{
+					"Status is 201": true
+				}
+			]
+		},
+		{
+			"id": "49c8622b-453d-4b70-8fdb-995fe40b48d7",
+			"name": "Invalid role (400)",
+			"url": "http://localhost:5000/api/admin/users",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status is 400": true
+			},
+			"testPassFailCounts": {
+				"Status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status is 400": true
+				}
+			]
+		},
+		{
+			"id": "04c478b9-bd28-42f3-afa8-38d180321d75",
+			"name": "Assign new owner to restaurant A",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1/owner",
+			"time": 31,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				31
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "fda3750f-36a2-4b02-947d-9cee610da162",
+			"name": "Assign same owner to B (409)",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b5/owner",
+			"time": 19,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Status is 409": true
+			},
+			"testPassFailCounts": {
+				"Status is 409": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status is 409": true
+				}
+			]
+		},
+		{
+			"id": "976256f7-3d8c-43b8-b079-282944c99755",
+			"name": "Update restaurant A",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1",
+			"time": 23,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "241382d2-990e-4650-a361-6d5986f63f17",
+			"name": "Search/filter all reviews",
+			"url": "http://localhost:5000/api/admin/reviews?rating=3",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "45d5adc8-1aeb-4682-af27-b2a56bef56ba",
+			"name": "Remove customer 2's review",
+			"url": "http://localhost:5000/api/reviews/6af40b1399707490c9e908e8",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "0539cbd0-e732-426c-9f97-52e1679b39e3",
+			"name": "Deactivate user",
+			"url": "http://localhost:5000/api/admin/users/6af40b1499707490c9e9090d",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "d52bd58e-a744-48b9-b218-2ebe25e1476b",
+			"name": "Delete user (frees restaurant A)",
+			"url": "http://localhost:5000/api/admin/users/6af40b1499707490c9e9090d",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "b156ab05-7abd-4193-bd5e-d1e2fb07a65d",
+			"name": "Delete restaurant A",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b1",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "941053e3-10b3-4346-bb6f-482f5859be39",
+			"name": "Delete restaurant B",
+			"url": "http://localhost:5000/api/restaurants/6af40b1099707490c9e908b5",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status is 200": true
+			},
+			"testPassFailCounts": {
+				"Status is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status is 200": true
+				}
+			]
+		},
+		{
+			"id": "7a731c88-48c6-4878-a0b8-78e6192381ea",
+			"name": "Customer cannot open admin routes (403)",
+			"url": "http://localhost:5000/api/admin/stats",
+			"time": 7,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status is 403": true
+			},
+			"testPassFailCounts": {
+				"Status is 403": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status is 403": true
+				}
+			]
+		},
+		{
+			"id": "03d62ba5-dbad-45b1-8710-6036ba0f2f40",
+			"name": "Admin route without token (401)",
+			"url": "http://localhost:5000/api/admin/stats",
+			"time": 3,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status is 401": true
+			},
+			"testPassFailCounts": {
+				"Status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				3
+			],
+			"allTests": [
+				{
+					"Status is 401": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 3275,
+	"collection": {
+		"requests": [
+			{
+				"id": "6f6594b0-b382-441b-a41a-3a0aa356e6a8",
+				"method": "POST"
+			},
+			{
+				"id": "e7a9ad01-e43a-4009-b988-daf16f0c0f69",
+				"method": "POST"
+			},
+			{
+				"id": "b49be1e0-3424-4e03-927c-72248d71dc6e",
+				"method": "POST"
+			},
+			{
+				"id": "9131fc56-edb4-4988-aceb-b4e153e61d62",
+				"method": "POST"
+			},
+			{
+				"id": "843a1c7b-9163-41e1-a9cd-4f99ea8e73f7",
+				"method": "GET"
+			},
+			{
+				"id": "4514d70b-18c5-4f89-8af2-083a6590b670",
+				"method": "POST"
+			},
+			{
+				"id": "a1df8a23-c110-4c28-96e1-0550eba10964",
+				"method": "POST"
+			},
+			{
+				"id": "86abae63-8ece-44ea-829f-b1914724fbfb",
+				"method": "PUT"
+			},
+			{
+				"id": "c9d514ef-3dbd-42bb-8da9-5ee3409870df",
+				"method": "POST"
+			},
+			{
+				"id": "00e5c790-8596-4b2c-9c89-67f9d17d3080",
+				"method": "POST"
+			},
+			{
+				"id": "2c1a03e6-874c-4b42-879c-051a65a6e1da",
+				"method": "POST"
+			},
+			{
+				"id": "7dacdeae-d81a-4db4-9848-c5a3dea08118",
+				"method": "POST"
+			},
+			{
+				"id": "2ba111fc-454f-4c24-8e16-3e730a4c2a51",
+				"method": "GET"
+			},
+			{
+				"id": "a24007d7-e453-4a38-b65c-aecb777fb913",
+				"method": "GET"
+			},
+			{
+				"id": "a3ea9be4-cbea-4d56-80f7-f7418669b288",
+				"method": "GET"
+			},
+			{
+				"id": "4cecdfc3-6f12-4b81-895b-924a8360c0ca",
+				"method": "GET"
+			},
+			{
+				"id": "3b2d9364-6b61-458a-a486-ff8e6cb12119",
+				"method": "GET"
+			},
+			{
+				"id": "a369ca6b-96ff-4f06-b8ed-4aef5c009884",
+				"method": "GET"
+			},
+			{
+				"id": "0588e90d-fd37-44ac-962f-784c48d086b9",
+				"method": "GET"
+			},
+			{
+				"id": "9c434075-3271-4219-9e09-19be7a20044b",
+				"method": "GET"
+			},
+			{
+				"id": "41161366-812a-4407-a56c-3c87fea99727",
+				"method": "GET"
+			},
+			{
+				"id": "a1c0ae81-b71e-4a0b-8bb4-8d2de15e9c5f",
+				"method": "GET"
+			},
+			{
+				"id": "038ff9b2-d462-4358-916a-923f6543dd61",
+				"method": "GET"
+			},
+			{
+				"id": "c3c86fa3-19e7-4d7a-b87c-5fc810c15b32",
+				"method": "POST"
+			},
+			{
+				"id": "75fa3bc8-5cbc-4738-b602-7d0bbe4fbccf",
+				"method": "POST"
+			},
+			{
+				"id": "9f8d165e-3474-49f4-a829-006805047da3",
+				"method": "POST"
+			},
+			{
+				"id": "8dbba134-c9fd-4c6d-8c33-bf194302f4af",
+				"method": "POST"
+			},
+			{
+				"id": "5d8db2f9-297c-4537-bdaf-0b82ba392361",
+				"method": "POST"
+			},
+			{
+				"id": "9393d018-bab7-47e7-8d10-e6979f19ff1a",
+				"method": "POST"
+			},
+			{
+				"id": "033fffe7-96c0-4325-9224-7a6f0abf56e9",
+				"method": "POST"
+			},
+			{
+				"id": "e4a33514-cb02-45db-8044-eee7ef8719e8",
+				"method": "POST"
+			},
+			{
+				"id": "94a1975b-069c-451f-95e2-8884cecd86d9",
+				"method": "POST"
+			},
+			{
+				"id": "9726c14c-fd0c-4cbf-adf1-b43daea43e3c",
+				"method": "PUT"
+			},
+			{
+				"id": "afd43ad5-50be-4b20-b1cf-31738d637b5c",
+				"method": "DELETE"
+			},
+			{
+				"id": "2a3fb3ce-6a51-44e1-9f3d-49a468e1b3e1",
+				"method": "PUT"
+			},
+			{
+				"id": "aa8e85fc-b1a5-4d34-89e1-c98e8aab78e4",
+				"method": "POST"
+			},
+			{
+				"id": "f0312dc7-97d7-47ec-a056-869b15ac3a19",
+				"method": "GET"
+			},
+			{
+				"id": "cef236ea-b95a-4dfa-be24-8d40ec2f10b2",
+				"method": "DELETE"
+			},
+			{
+				"id": "79c74123-dabb-4663-bdd5-94eaac04311a",
+				"method": "PUT"
+			},
+			{
+				"id": "d4b71d8e-4031-4308-a81d-70f2c89b49a3",
+				"method": "GET"
+			},
+			{
+				"id": "835754ce-71a8-4318-ab9f-0f3026a920e5",
+				"method": "GET"
+			},
+			{
+				"id": "d3118143-df1d-4bef-9c59-6c2a8af6a6ff",
+				"method": "PUT"
+			},
+			{
+				"id": "295c2dd7-3165-477f-ad1b-5a423b2d3fc7",
+				"method": "PUT"
+			},
+			{
+				"id": "fd2f3ffc-ae78-4f1c-b7cc-211a861dd756",
+				"method": "PUT"
+			},
+			{
+				"id": "6dd3f013-9140-4324-bc37-e0d527290c72",
+				"method": "GET"
+			},
+			{
+				"id": "7da1960a-691f-440f-895c-b06c2556f6e9",
+				"method": "GET"
+			},
+			{
+				"id": "3ab7a665-2b3b-4d02-b14e-ade7d8daa318",
+				"method": "GET"
+			},
+			{
+				"id": "a3609caf-5823-423a-b38e-97845e91c48e",
+				"method": "POST"
+			},
+			{
+				"id": "49c8622b-453d-4b70-8fdb-995fe40b48d7",
+				"method": "POST"
+			},
+			{
+				"id": "04c478b9-bd28-42f3-afa8-38d180321d75",
+				"method": "PUT"
+			},
+			{
+				"id": "fda3750f-36a2-4b02-947d-9cee610da162",
+				"method": "PUT"
+			},
+			{
+				"id": "976256f7-3d8c-43b8-b079-282944c99755",
+				"method": "PUT"
+			},
+			{
+				"id": "241382d2-990e-4650-a361-6d5986f63f17",
+				"method": "GET"
+			},
+			{
+				"id": "45d5adc8-1aeb-4682-af27-b2a56bef56ba",
+				"method": "DELETE"
+			},
+			{
+				"id": "0539cbd0-e732-426c-9f97-52e1679b39e3",
+				"method": "PUT"
+			},
+			{
+				"id": "d52bd58e-a744-48b9-b218-2ebe25e1476b",
+				"method": "DELETE"
+			},
+			{
+				"id": "b156ab05-7abd-4193-bd5e-d1e2fb07a65d",
+				"method": "DELETE"
+			},
+			{
+				"id": "941053e3-10b3-4346-bb6f-482f5859be39",
+				"method": "DELETE"
+			},
+			{
+				"id": "7a731c88-48c6-4878-a0b8-78e6192381ea",
+				"method": "GET"
+			},
+			{
+				"id": "03d62ba5-dbad-45b1-8710-6036ba0f2f40",
+				"method": "GET"
+			}
+		]
+	}
+}

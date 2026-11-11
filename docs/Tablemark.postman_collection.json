@@ -1,0 +1,1914 @@
+{
+  "info": {
+    "name": "Tablemark API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Prerequisites: backend running and `npm run seed` done (creates admin/owner/customer). Run the whole collection in order with the Collection Runner. Folder 1 creates its own test restaurants and a second customer; folder 6 cleans them up. Every request asserts its expected status code."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "ownerToken",
+      "value": ""
+    },
+    {
+      "key": "customerToken",
+      "value": ""
+    },
+    {
+      "key": "customer2Token",
+      "value": ""
+    },
+    {
+      "key": "restaurantId",
+      "value": ""
+    },
+    {
+      "key": "restaurantBId",
+      "value": ""
+    },
+    {
+      "key": "reviewId",
+      "value": ""
+    },
+    {
+      "key": "review2Id",
+      "value": ""
+    },
+    {
+      "key": "ownerRestaurantId",
+      "value": ""
+    },
+    {
+      "key": "seededOwnerId",
+      "value": ""
+    },
+    {
+      "key": "newOwnerId",
+      "value": ""
+    },
+    {
+      "key": "runId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Setup (creates its own test data)",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.token) pm.collectionVariables.set('adminToken', j.token);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('runId', Date.now());"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@tablemark.com\",\n  \"password\": \"Admin@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.token) pm.collectionVariables.set('ownerToken', j.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner@tablemark.com\",\n  \"password\": \"Owner@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.token) pm.collectionVariables.set('customerToken', j.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@tablemark.com\",\n  \"password\": \"Customer@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register a second customer (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.token) pm.collectionVariables.set('customer2Token', j.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Second Customer\",\n  \"email\": \"tester{{runId}}@example.com\",\n  \"password\": \"Passw0rd!x\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Find seeded owner id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "const u = (j.users || []).find(x => x.email === 'owner@tablemark.com');",
+                  "if (u && u.id) pm.collectionVariables.set('seededOwnerId', u && u.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users?role=owner&search=owner@tablemark.com"
+          }
+        },
+        {
+          "name": "Create restaurant A (no owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.restaurant && j.restaurant._id) pm.collectionVariables.set('restaurantId', j.restaurant && j.restaurant._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Collection Test A {{runId}}\",\n  \"location\": \"Testville\",\n  \"cuisine\": \"Thai\",\n  \"address\": \"1 Test Rd\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create restaurant B",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.restaurant && j.restaurant._id) pm.collectionVariables.set('restaurantBId', j.restaurant && j.restaurant._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Collection Test B {{runId}}\",\n  \"location\": \"Testville\",\n  \"cuisine\": \"Italian\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Assign seeded owner to B (409 if owner already has a restaurant from an earlier run)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 or 409', () => pm.expect(pm.response.code).to.be.oneOf([200, 409]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantBId}}/owner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ownerId\": \"{{seededOwnerId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Auth",
+      "item": [
+        {
+          "name": "Weak password (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Weak\",\n  \"email\": \"weak{{runId}}@example.com\",\n  \"password\": \"abc\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Invalid email (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bad Email\",\n  \"email\": \"not-an-email\",\n  \"password\": \"Passw0rd!x\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Duplicate email (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.expect(pm.response.code).to.be.oneOf([409]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dup\",\n  \"email\": \"customer@tablemark.com\",\n  \"password\": \"Passw0rd!x\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Wrong password (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.expect(pm.response.code).to.be.oneOf([401]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@tablemark.com\",\n  \"password\": \"Wrong@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Current user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        },
+        {
+          "name": "Current user without token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.expect(pm.response.code).to.be.oneOf([401]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Restaurants (search, filter, stats)",
+      "item": [
+        {
+          "name": "List restaurants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants"
+          }
+        },
+        {
+          "name": "Search by name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "pm.test('finds restaurant A', () => pm.expect(j.items.length).to.be.above(0));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants?search=Collection%20Test%20A"
+          }
+        },
+        {
+          "name": "Filter by location",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants?location=Testville"
+          }
+        },
+        {
+          "name": "Filter by cuisine + sort by rating",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants?cuisine=Thai&sort=rating"
+          }
+        },
+        {
+          "name": "Filter options",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/filters"
+          }
+        },
+        {
+          "name": "Detail (no ratings yet)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "pm.test('averageRating is null with no reviews', () => pm.expect(j.restaurant.averageRating).to.eql(null));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}"
+          }
+        },
+        {
+          "name": "Rating distribution (aggregation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/distribution"
+          }
+        },
+        {
+          "name": "Invalid ObjectId (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/not-an-id"
+          }
+        },
+        {
+          "name": "Unknown restaurant (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.expect(pm.response.code).to.be.oneOf([404]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/64b7f0c2a1b2c3d4e5f60718"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Customer reviews",
+      "item": [
+        {
+          "name": "Create review (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.review && j.review._id) pm.collectionVariables.set('reviewId', j.review && j.review._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Wonderful food and friendly staff.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Second review for same restaurant (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.expect(pm.response.code).to.be.oneOf([409]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Trying to review twice.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Rating 6 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 6,\n  \"comment\": \"Too high a rating.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Rating 0 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 0,\n  \"comment\": \"Too low a rating.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Rating 3.5 (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 3.5,\n  \"comment\": \"Half stars not allowed.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Rating \"abc\" (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": \"abc\",\n  \"comment\": \"Not a number.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Missing rating (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"No rating sent.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "No token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.expect(pm.response.code).to.be.oneOf([401]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"No token sent.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Owner role cannot review (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Owner role blocked.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Customer 2 edits customer 1's review (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{reviewId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 1,\n  \"comment\": \"Hijack attempt here.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Customer 2 deletes customer 1's review (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{reviewId}}"
+          }
+        },
+        {
+          "name": "Update own review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{reviewId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Updated: still very good.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Customer 2 posts a review (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.review && j.review._id) pm.collectionVariables.set('review2Id', j.review && j.review._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer2Token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/reviews",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 3,\n  \"comment\": \"Average experience overall.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Average is now 3.5 (4 and 3)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "pm.test('average 3.5, 2 reviews', () => { pm.expect(j.restaurant.averageRating).to.eql(3.5); pm.expect(j.restaurant.reviewCount).to.eql(2); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}"
+          }
+        },
+        {
+          "name": "Delete own review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{reviewId}}"
+          }
+        },
+        {
+          "name": "Deleted review is gone (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.expect(pm.response.code).to.be.oneOf([404]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{reviewId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Review no longer exists.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Owner",
+      "item": [
+        {
+          "name": "My restaurant (+ distribution)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.restaurant && j.restaurant._id) pm.collectionVariables.set('ownerRestaurantId', j.restaurant && j.restaurant._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/owner/restaurant"
+          }
+        },
+        {
+          "name": "Reviews + customers for my restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/owner/reviews"
+          }
+        },
+        {
+          "name": "Update permitted details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{ownerRestaurantId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"openingHours\": \"Daily 11:00-23:30\",\n  \"description\": \"Updated by owner.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Try to rename restaurant (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{ownerRestaurantId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hacked Name\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update another owner's restaurant (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Not mine to edit.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Customer cannot use owner routes (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/owner/restaurant"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin",
+      "item": [
+        {
+          "name": "Dashboard stats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "pm.test('has dashboard fields', () => ['totalUsers','totalRestaurants','totalReviews','averagePlatformRating','distribution'].forEach(k => pm.expect(j).to.have.property(k)));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/stats"
+          }
+        },
+        {
+          "name": "Search/filter users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users?role=customer&search=a"
+          }
+        },
+        {
+          "name": "Create restaurant owner (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.expect(pm.response.code).to.be.oneOf([201]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}",
+                  "if (j.user && j.user.id) pm.collectionVariables.set('newOwnerId', j.user && j.user.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nina Owner\",\n  \"email\": \"nina{{runId}}@example.com\",\n  \"password\": \"Owner@1234\",\n  \"role\": \"owner\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Invalid role (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.expect(pm.response.code).to.be.oneOf([400]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bad Role\",\n  \"email\": \"badrole{{runId}}@example.com\",\n  \"password\": \"Owner@1234\",\n  \"role\": \"superuser\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Assign new owner to restaurant A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}/owner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ownerId\": \"{{newOwnerId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Assign same owner to B (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.expect(pm.response.code).to.be.oneOf([409]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantBId}}/owner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ownerId\": \"{{newOwnerId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update restaurant A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Collection Test A renamed {{runId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Search/filter all reviews",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/reviews?rating=3"
+          }
+        },
+        {
+          "name": "Remove customer 2's review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reviews/{{review2Id}}"
+          }
+        },
+        {
+          "name": "Deactivate user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users/{{newOwnerId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete user (frees restaurant A)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/users/{{newOwnerId}}"
+          }
+        },
+        {
+          "name": "Delete restaurant A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantId}}"
+          }
+        },
+        {
+          "name": "Delete restaurant B",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.expect(pm.response.code).to.be.oneOf([200]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/restaurants/{{restaurantBId}}"
+          }
+        },
+        {
+          "name": "Customer cannot open admin routes (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', () => pm.expect(pm.response.code).to.be.oneOf([403]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/stats"
+          }
+        },
+        {
+          "name": "Admin route without token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.expect(pm.response.code).to.be.oneOf([401]));",
+                  "let j = {}; try { j = pm.response.json(); } catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/stats"
+          }
+        }
+      ]
+    }
+  ]
+}
