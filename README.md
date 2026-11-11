@@ -34,7 +34,18 @@ restaurant-platform/
 
 ## Setup
 
+**Prerequisites:** Node.js 18+ and a running MongoDB (local, or an Atlas connection string).
+
+### Get the code
+
+```bash
+git clone https://github.com/pavanteja78/Restaurant-Rating-and-Review-Platform.git
+cd Restaurant-Rating-and-Review-Platform
+```
+
 Prerequisites: Node.js 18+ and a running MongoDB (local, or an Atlas connection string).
+
+git clone https://github.com/pavanteja78/Restaurant-Rating-and-Review-Platform
 
 ### 1. API
 
